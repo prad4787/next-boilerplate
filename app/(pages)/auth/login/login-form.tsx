@@ -1,3 +1,4 @@
+"use client"
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
@@ -7,16 +8,32 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import Link from "next/link"
+import { SubmitHandler, useForm } from "react-hook-form"
+import { loginFormSchema } from "@/app/validators/auth"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { FormField } from "@/components/form/form-field"
+import { Form } from "@/components/form/form"
+
+
+type LoginForm = {
+  email: string
+  password: string
+}
 
 export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
 
-  
+  const form = useForm<LoginForm>({
+    resolver: zodResolver(loginFormSchema),
+    mode: "onSubmit",
+  });
+
+  const onSubmit: SubmitHandler<LoginForm> = (data) => {
+    console.log(data);
+  };
 
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
@@ -28,20 +45,28 @@ export function LoginForm({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <Form form={form} onSubmit={onSubmit}>
             <div className="flex flex-col gap-6">
-              <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
-                <Input
+
+              <div className={`grid gap-2`}>
+                <FormField
+                  label="Email"
+                  name="email"
                   id="email"
                   type="email"
                   placeholder="m@example.com"
-                  required
                 />
               </div>
-              <div className="grid gap-2">
+              <div className="grid gap-0">
+                
+                <FormField
+                  label="Password"
+                  name="password"
+                  id="password"
+                  placeholder="*********"
+                  type="password"
+                />
                 <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
                   <a
                     href="#"
                     className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
@@ -49,9 +74,9 @@ export function LoginForm({
                     Forgot your password?
                   </a>
                 </div>
-                <Input id="password" type="password" required />
+
               </div>
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full" >
                 Login
               </Button>
               <Button variant="outline" className="w-full">
@@ -64,7 +89,7 @@ export function LoginForm({
                 Sign up
               </Link>
             </div>
-          </form>
+          </Form>
         </CardContent>
       </Card>
     </div>
