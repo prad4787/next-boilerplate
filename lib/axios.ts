@@ -1,12 +1,13 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import { store } from '@/store/store';
 import { logout, setCredentials } from '@/store/slices/authSlice';
+import { formatUrl } from '@/helpers/url.helper';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
 const MAX_RETRIES = 5;
 
 export const axiosInstance = axios.create({
-  baseURL: BASE_URL,
+  baseURL: formatUrl(BASE_URL),
   withCredentials: true,
   timeout: 10000,
 });

@@ -14,7 +14,8 @@ import { loginFormSchema } from "@/app/validators/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FormField } from "@/components/form/form-field"
 import { Form } from "@/components/form/form"
-
+import { useLoginMutation } from "@/store/api/authApi"
+import { useRouter } from "next/navigation"
 
 type LoginForm = {
   email: string
@@ -26,13 +27,35 @@ export function LoginForm({
   ...props
 }: React.ComponentPropsWithoutRef<"div">) {
 
+  const [login, { isLoading }] = useLoginMutation()
+  const router = useRouter()
+
   const form = useForm<LoginForm>({
     resolver: zodResolver(loginFormSchema),
     mode: "onSubmit",
+    defaultValues: {
+      email: "admin@gmail.com",
+      password: "secret",
+    },
   });
 
-  const onSubmit: SubmitHandler<LoginForm> = (data) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<LoginForm> = async (data) => {
+    try {
+      const response = await login(data).unwrap()
+
+      console.log(response)
+      // toast({
+      //   title: "Success",
+      //   description: "Logged in successfully",
+      // })
+      router.push("/dashboard")
+    } catch (error) {
+      // toast({
+      //   variant: "destructive",
+      //   title: "Error",
+      //   description: "Invalid credentials",
+      // })
+    }
   };
 
   return (
@@ -50,21 +73,18 @@ export function LoginForm({
 
               <div className={`grid gap-2`}>
                 <FormField
-                  label="Email"
                   name="email"
-                  id="email"
-                  type="email"
+                  label="Email"
                   placeholder="m@example.com"
                 />
               </div>
               <div className="grid gap-0">
-                
+
                 <FormField
-                  label="Password"
                   name="password"
-                  id="password"
-                  placeholder="*********"
+                  label="Password"
                   type="password"
+                  placeholder="*********"
                 />
                 <div className="flex items-center">
                   <a
@@ -76,8 +96,8 @@ export function LoginForm({
                 </div>
 
               </div>
-              <Button type="submit" className="w-full" >
-                Login
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading ? "Signing in..." : "Sign in"}
               </Button>
               <Button variant="outline" className="w-full">
                 Login with Google

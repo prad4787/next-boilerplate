@@ -1,3 +1,4 @@
+import apiRoutes from '@/lib/api.routes';
 import { baseApi } from './baseApi';
 
 export interface LoginRequest {
@@ -6,19 +7,17 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  token: string;
-  user: {
-    id: string;
-    email: string;
-    name: string;
-  };
+  access_token: string;
+  refresh_token: string;
+  type: string;
+  id: string;
 }
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     login: builder.mutation<LoginResponse, LoginRequest>({
       query: (credentials) => ({
-        url: '/auth/login',
+        url: apiRoutes.login,
         method: 'POST',
         body: credentials,
       }),

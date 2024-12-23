@@ -5,7 +5,7 @@ export const baseApi = createApi({
   reducerPath: 'api',
   baseQuery: axiosBaseQuery(),
   endpoints: () => ({}),
-  tagTypes: ['Auth', 'User', 'Course'], // Add your entity tags here
+  tagTypes: ['Auth',], // Add your entity tags here
 });
 
 // Export hooks for usage in components
