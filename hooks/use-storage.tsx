@@ -16,3 +16,40 @@ export function useStorage() {
         clear: () => localStorage.clear(),
     };
 }
+
+export function useGetItem() {
+    const { getItem } = useStorage();
+    return (key: string) => getItem(key);
+}
+
+export function useSetItem() {
+    const { setItem } = useStorage();
+    return (key: string, value: any) => setItem(key, typeof value === 'object' ? JSON.stringify(value) : value);
+}
+
+export function useRemoveItem() {
+    const { removeItem } = useStorage();
+    return (key: string) => removeItem(key);
+}
+
+export function useClear() {
+    const { clear } = useStorage();
+    return () => clear();
+}
+
+export function useGetInt() {
+    const { getInt } = useStorage();
+    return (key: string) => getInt(key);
+}
+
+export function useGetBoolean() {
+    const { getBoolean } = useStorage();
+    return (key: string) => getBoolean(key);
+}
+
+export function useGetJson() {
+    const { getJson } = useStorage();
+    return (key: string) => getJson(key);
+}
+
+

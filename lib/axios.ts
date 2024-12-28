@@ -3,6 +3,7 @@ import { store } from '@/store/store';
 import { logout, setCredentials } from '@/store/slices/authSlice';
 import { formatUrl } from '@/helpers/url.helper';
 import { toast } from '@/hooks/use-toast';
+import { STORAGE_KEYS } from '@/constants/storage.constant';
 
 const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
 const MAX_RETRIES = 5;
@@ -57,7 +58,7 @@ axiosInstance.interceptors.response.use(
             });
             
             const { accessToken, user } = response.data;
-            localStorage.setItem('accessToken', accessToken);
+            localStorage.setItem(STORAGE_KEYS.ACCESS_TOKEN, accessToken);
             
             // Update store
             store.dispatch(setCredentials({ 
@@ -74,8 +75,9 @@ axiosInstance.interceptors.response.use(
           } catch (refreshError) {
             // If refresh token is invalid, logout user
             store.dispatch(logout());
-            localStorage.removeItem('accessToken');
-            localStorage.removeItem('refreshToken');
+            localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+            localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+            localStorage.removeItem(STORAGE_KEYS.USER);
             toast({
               title: 'Session Expired',
               description: 'Please login again',
@@ -86,8 +88,9 @@ axiosInstance.interceptors.response.use(
         } else {
           // No refresh token available, logout user
           store.dispatch(logout());
-          localStorage.removeItem('accessToken');
-          localStorage.removeItem('refreshToken');
+          localStorage.removeItem(STORAGE_KEYS.ACCESS_TOKEN);
+          localStorage.removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+          localStorage.removeItem(STORAGE_KEYS.USER);
           toast({
             title: 'Authentication Error',
             description: 'Please login to continue',

@@ -18,6 +18,7 @@ import { useLoginMutation } from "@/store/api/authApi"
 import { useRouter } from "next/navigation"
 import { LoginResponse } from "@/types/auth"
 import { useStorage } from "@/hooks/use-storage"
+import { STORAGE_KEYS } from "@/constants/storage.constant"
 
 type LoginFormData = {
   email: string;
@@ -48,17 +49,19 @@ export function LoginForm({
 
       const loginData = {
         email: formValues.email,
-        password: formValues.password
+        password: formValues.password,
       };
 
-      const response: LoginResponse = await login(loginData).unwrap()
-
-      setItem('accessToken', response.access_token)
-      setItem('refreshToken', response.refresh_token)
-      setItem('user', JSON.stringify(response.user))
-      router.push("/dashboard")
+      const response = await login(loginData).unwrap();
+      
+      setItem(STORAGE_KEYS.ACCESS_TOKEN, response.access_token);
+      setItem(STORAGE_KEYS.REFRESH_TOKEN, response.refresh_token);
+      setItem(STORAGE_KEYS.USER, JSON.stringify(response.user));
+      
+      router.push("/user/dashboard");
     } catch (error) {
       console.error("Login error:", error);
+      
     }
   };
 
