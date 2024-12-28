@@ -1,17 +1,6 @@
 import apiRoutes from '@/lib/api.routes';
 import { baseApi } from './baseApi';
-
-export interface LoginRequest {
-  email: string;
-  password: string;
-}
-
-export interface LoginResponse {
-  access_token: string;
-  refresh_token: string;
-  type: string;
-  id: string;
-}
+import { LoginRequest, LoginResponse } from '@/types/auth';
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -19,7 +8,7 @@ export const authApi = baseApi.injectEndpoints({
       query: (credentials) => ({
         url: apiRoutes.login,
         method: 'POST',
-        body: credentials,
+        data: credentials,
       }),
       invalidatesTags: ['Auth'],
     }),

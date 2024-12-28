@@ -10,16 +10,18 @@ import {
 } from "@/components/ui/card"
 import Link from "next/link"
 import { SubmitHandler, useForm } from "react-hook-form"
-import { loginFormSchema } from "@/app/validators/auth"
+import { loginFormSchema } from "@/validators/auth"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { FormField } from "@/components/form/form-field"
 import { Form } from "@/components/form/form"
 import { useLoginMutation } from "@/store/api/authApi"
 import { useRouter } from "next/navigation"
+import { LoginResponse } from "@/types/auth"
+import { useStorage } from "@/hooks/use-storage"
 
-type LoginForm = {
-  email: string
-  password: string
+type LoginFormData = {
+  email: string;
+  password: string;
 }
 
 export function LoginForm({
@@ -29,8 +31,9 @@ export function LoginForm({
 
   const [login, { isLoading }] = useLoginMutation()
   const router = useRouter()
+  const { setItem } = useStorage()
 
-  const form = useForm<LoginForm>({
+  const form = useForm<LoginFormData>({
     resolver: zodResolver(loginFormSchema),
     mode: "onSubmit",
     defaultValues: {
@@ -39,16 +42,29 @@ export function LoginForm({
     },
   });
 
-  const onSubmit: SubmitHandler<LoginForm> = async (data) => {
+  const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
     try {
-      const response = await login(data).unwrap()
+      const formValues = form.getValues();
+      console.log('Form values:', formValues);
 
-      console.log(response)
+      const loginData = {
+        email: formValues.email,
+        password: formValues.password
+      };
+
+      console.log('Login data:', loginData);
+      const response: LoginResponse = await login(loginData).unwrap()
+
+      setItem('accessToken', response.access_token)
+      setItem('refreshToken', response.refresh_token)
+      setItem('user', JSON.stringify(response.user))
+
+      console.log({ response })
       // toast({
       //   title: "Success",
       //   description: "Logged in successfully",
       // })
-      router.push("/dashboard")
+      // router.push("/dashboard")
     } catch (error) {
       // toast({
       //   variant: "destructive",

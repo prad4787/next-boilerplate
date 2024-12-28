@@ -26,7 +26,14 @@ axiosInstance.interceptors.request.use(
 
 // Response interceptor
 axiosInstance.interceptors.response.use(
-  (response) => response,
+  async (response) => {
+    if (response.status === 200) {
+      return response.data;
+    }
+    return response;
+  },
+  // success 
+
   async (error: AxiosError) => {
     const originalRequest = error.config as AxiosRequestConfig & { _retry?: number };
     
