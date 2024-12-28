@@ -45,32 +45,20 @@ export function LoginForm({
   const onSubmit: SubmitHandler<LoginFormData> = async (data) => {
     try {
       const formValues = form.getValues();
-      console.log('Form values:', formValues);
 
       const loginData = {
         email: formValues.email,
         password: formValues.password
       };
 
-      console.log('Login data:', loginData);
       const response: LoginResponse = await login(loginData).unwrap()
 
       setItem('accessToken', response.access_token)
       setItem('refreshToken', response.refresh_token)
       setItem('user', JSON.stringify(response.user))
-
-      console.log({ response })
-      // toast({
-      //   title: "Success",
-      //   description: "Logged in successfully",
-      // })
-      // router.push("/dashboard")
+      router.push("/dashboard")
     } catch (error) {
-      // toast({
-      //   variant: "destructive",
-      //   title: "Error",
-      //   description: "Invalid credentials",
-      // })
+      console.error("Login error:", error);
     }
   };
 
