@@ -1,11 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useEffect, useState } from "react";
 import { AppSidebar } from "./components/app-sidebar";
 import { useAuth } from "@/hooks/use-auth";
-import { useSelector } from "react-redux";
-import { RootState } from "@/store/store";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@radix-ui/react-separator";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
@@ -17,32 +14,10 @@ export default function UserLayout({
 }: {
     children: React.ReactNode;
 }) {
-    const router = useRouter();
-    // const { handleLogout } = useAuth();
-    // const { user, token, isAuthenticated } = useSelector((state: RootState) => state.auth);
-
-    // useEffect(() => {
-    //     if (!isAuthenticated || !user || !token) {
-    //         //   handleLogout();
-    //         console.log("not authenticated");
-    //         //   router.push("/auth/login");
-    //     }
-    // }, [isAuthenticated, user, token, handleLogout]);
-
-    // if (!isAuthenticated || !user || !token) {
-    //     return null; // or a loading spinner
-    // }
+    useAuth();
 
     return (
-        // <div className="relative flex h-screen">
-        //   <AppSidebar />
-        //   <main className="flex-1 overflow-y-auto bg-gray-50 px-6 py-8">
-        //     {children}
-        //   </main>
-        // </div>
         <>
-
-
             <SidebarProvider>
                 <AppSidebar />
                 <SidebarInset>
@@ -67,7 +42,7 @@ export default function UserLayout({
                             </Breadcrumb>
                         </div>
                         <div className="flex items-center gap-2 px-4 ml-auto">
-                            <NavUser user={{ name: "John Doe", email: "jdoe@me.com", avatar: "https://github.com/shadcn.png" }}  />
+                            <NavUser />
                             <ThemeToggle />
                         </div>
                     </header>
@@ -75,5 +50,6 @@ export default function UserLayout({
                 </SidebarInset>
             </SidebarProvider>
         </>
+
     );
 }
