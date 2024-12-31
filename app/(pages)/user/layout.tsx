@@ -1,13 +1,13 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
-import { AppSidebar } from "./components/app-sidebar";
+import { AppSidebar } from "./components/layout/app-sidebar";
 import { useAuth } from "@/hooks/use-auth";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@radix-ui/react-separator";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
-import { ThemeToggle } from "./components/theme-toggle";
-import { NavUser } from "./components/nav-user";
+import { ThemeToggle } from "./components/layout/theme-toggle";
+import { NavUser } from "./components/layout/nav-user";
 
 export default function UserLayout({
     children,

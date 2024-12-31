@@ -13,10 +13,10 @@ import {
     SidebarRail,
     SidebarSeparator,
 } from "@/components/ui/sidebar"
+import { NavItem } from "@/types/nav"
 import { NavMain } from "./nav-main"
 import { SidebarHeader as AppSidebarHeader } from "./sidebar-header"
-import { SidebarFooter as AppSidebarFooter } from "./sidebar-footer"
-import { NavItem } from "@/types/nav"
+import {SidebarFooter as AppSidebarFooter } from "./sidebar-footer"
 
 // This is sample data.
 const navItems = [

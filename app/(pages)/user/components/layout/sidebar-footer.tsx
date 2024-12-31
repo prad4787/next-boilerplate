@@ -1,7 +1,5 @@
 "use client"
-
 import { SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
-import { LayoutDashboard, LayoutDashboardIcon } from "lucide-react";
 
 export function SidebarFooter() {
     return (
